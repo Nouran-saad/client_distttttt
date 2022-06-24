@@ -8,7 +8,7 @@ import "quill/dist/quill.snow.css" // stylesheet
 import {io} from 'socket.io-client' // to allow connections 
 import {useParams} from 'react-router-dom'  // route to different routes 
 const editor2=document.createElement("div") 
-const ENDPOINT = ' https://text-editor-project.herokuapp.com/';
+const ENDPOINT = 'https://text-editor-project.herokuapp.com/';
 
 
 const SAVE_INTERVAL_MS = 2000 // every 2 seconds we are saving our document 
