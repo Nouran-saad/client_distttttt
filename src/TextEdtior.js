@@ -114,6 +114,14 @@ useEffect to handle this connection*/
             quill.off('text-change',handler)  // upon cleaning up 
         }
     },[socket,quill]) // this func depends on socket,quill
+
+// alert if the user offline (internet connection lost)
+    useEffect(()=> {
+      if(socket== null) return
+      socket.on('internet',() => {
+        alert('user is offline')
+      })
+  },[socket])
     
 // we have our useCallback function that is gonna be called once the wrapper is rendered on our page
 // it takes the wrapper as parameter so wrapper is always defined before useCallback is called
@@ -136,10 +144,22 @@ is placed in a container we can clean it up each time using wrapper.innerHtml=""
         setQuill(q)
     } ,[])
 
-
-  return <div className="text" ref={wrapperRef}></div>
-  
-}
+    return (
+      <>
+      <div>
+        <button onClick={()=>{
+            var str = window.location.href;
+            var loc = str.substring(str.indexOf('documents') + 10);
+    
+            navigator.clipboard.writeText(loc);
+            // toast('Hello Geeks');
+    
+        
+        }}>Copy to Clipboard</button>
+      </div>
+      <div classname="container" ref={wrapperRef}></div>
+      </>
+      ) }
 /* we're creating an instance of the quill component once after rendering the page*/
 /* we use ref to reference our container and then UseRef to allow access DOM elements directly, and persist data 
 between renders without causing a component to re-render infinitely when changes occur (so we avoid)
