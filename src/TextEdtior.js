@@ -125,41 +125,59 @@ useEffect to handle this connection*/
     
 // we have our useCallback function that is gonna be called once the wrapper is rendered on our page
 // it takes the wrapper as parameter so wrapper is always defined before useCallback is called
-   const wrapperRef= useCallback((wrapper) => {
-        if (wrapper==null) return
+const wrapperRef= useCallback((wrapper) => {
 
-       wrapper.innerHTML="" // clean up --> every time we call this we want to set html to an empty string and to not allow to create mulitple toolbars
-       const editor=document.createElement("div") //create an object editor
-       wrapper.append(editor2) // put editor into wrapper 
-
-       wrapper.append(editor) // put editor into wrapper 
-       editor2.innerHTML="Number of Current Users "
-/*so when quill is created 
-it is included in the main container including everything and changes 
-don't cause replication of objects because we used a wrapper and since everything 
-is placed in a container we can clean it up each time using wrapper.innerHtml="" */       
-        const q=new Quill(editor,{theme: "snow"})
-        q.disable()  // if no document then disbale 
-        q.setText('Loading...') // if disabled display Loading...
-        setQuill(q)
-    } ,[])
-
-    return (
-      <>
-      <div>
-        <button onClick={()=>{
-            var str = window.location.href;
-            var loc = str.substring(str.indexOf('documents') + 10);
+  var toolbarOptions = [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote', 'code-block'],
     
-            navigator.clipboard.writeText(loc);
-            // toast('Hello Geeks');
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      [{ 'direction': 'rtl' }],                         // text direction
     
-        
-        }}>Copy to Clipboard</button>
-      </div>
-      <div classname="container" ref={wrapperRef}></div>
-      </>
-      ) }
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+    
+      ['clean']                                         // remove formatting button
+    ];
+    
+ const editor=document.createElement("div") //create an object editor
+
+ wrapper.append(editor2) // put editor into wrapper 
+
+ wrapper.append(editor) // put editor into wrapper 
+
+ editor2.innerHTML="Number of Current Users "
+
+const q=  new Quill(editor,{theme: "snow",
+  modules: {
+      toolbar: toolbarOptions
+      }
+  })
+  q.disable()  // if no document then disbale 
+  q.setText('Loading...') // if disabled display Loading...
+  setQuill(q)
+} ,[])
+
+return (
+  <>
+<div>
+<button onClick={()=>{
+  var str = window.location.href;
+  var loc = str.substring(str.indexOf('documents') + 10);
+  navigator.clipboard.writeText(loc);
+}}>Copy to Clipboard</button>
+</div>
+<div className="text container" ref={wrapperRef}></div>
+</>
+)
+}
+
 /* we're creating an instance of the quill component once after rendering the page*/
 /* we use ref to reference our container and then UseRef to allow access DOM elements directly, and persist data 
 between renders without causing a component to re-render infinitely when changes occur (so we avoid)
