@@ -5,10 +5,13 @@ that allows multiple users to edit at the same time without overwriting any chan
 import React, { useEffect,useCallback,useState } from 'react'
 import Quill from "quill"
 import "quill/dist/quill.snow.css" // stylesheet
+import { Offline, Online } from "react-detect-offline";
 import {io} from 'socket.io-client' // to allow connections 
 import {useParams} from 'react-router-dom'  // route to different routes 
 const editor2=document.createElement("div") 
 const ENDPOINT = 'https://server-edtior.herokuapp.com/';
+
+var q;
 
 
 const SAVE_INTERVAL_MS = 2000 // every 2 seconds we are saving our document 
@@ -72,6 +75,7 @@ useEffect to handle this connection*/
     }
   }, [socket, quill]) // this func depends on socket,quill
 
+
  //-------------------updating our document---------------------
     useEffect(()=> {
         if(socket== null || quill==null) return
@@ -115,14 +119,7 @@ useEffect to handle this connection*/
         }
     },[socket,quill]) // this func depends on socket,quill
 
-// alert if the user offline (internet connection lost)
-    useEffect(()=> {
-      if(socket== null) return
-      socket.on('internet',() => {
-        alert('user is offline')
-      })
-  },[socket])
-    
+
 // we have our useCallback function that is gonna be called once the wrapper is rendered on our page
 // it takes the wrapper as parameter so wrapper is always defined before useCallback is called
 const wrapperRef= useCallback((wrapper) => {
@@ -153,8 +150,17 @@ const wrapperRef= useCallback((wrapper) => {
  wrapper.append(editor) // put editor into wrapper 
 
  editor2.innerHTML="Number of Current Users "
+ const el = document.getElementById("status")
+ setInterval(() => {
+   if(el.textContent === "You are Offline, Please Check your Connection and Try Again!"){
+     q.disable()
+   }
+   else{
+     q.enable()
+   }
+ }, 1000);
 
-const q=  new Quill(editor,{theme: "snow",
+ q=  new Quill(editor,{theme: "snow",
   modules: {
       toolbar: toolbarOptions
       }
@@ -173,6 +179,14 @@ return (
   navigator.clipboard.writeText(loc);
 }}>Copy to Clipboard</button>
 </div>
+<div id="status">
+    <Offline id = "offline">
+        You are Offline, Please Check your Connection and Try Again!
+    </Offline>
+
+
+
+  </div>
 <div className="text container" ref={wrapperRef}></div>
 </>
 )

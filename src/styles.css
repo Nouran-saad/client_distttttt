@@ -125,3 +125,7 @@ body{
   cursor: pointer;
   font-family: "quicksand";
 }
+#status{
+    color:red;
+    font-size: 62px;
+}
