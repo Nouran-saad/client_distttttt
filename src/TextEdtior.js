@@ -5,7 +5,7 @@ import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import {io} from 'socket.io-client'
 import { Offline } from "react-detect-offline";
-const ENDPOINT = 'https://server-dist.herokuapp.com/';
+const ENDPOINT = 'https://last-server.herokuapp.com/';
 
 var q;
 const editor2=document.createElement("div") 
