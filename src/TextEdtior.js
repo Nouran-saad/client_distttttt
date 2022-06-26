@@ -5,11 +5,11 @@ that allows multiple users to edit at the same time without overwriting any chan
 import React, { useEffect,useCallback,useState } from 'react'
 import Quill from "quill"
 import "quill/dist/quill.snow.css" // stylesheet
-import { Offline, Online } from "react-detect-offline";
+import { Offline } from "react-detect-offline";
 import {io} from 'socket.io-client' // to allow connections 
 import {useParams} from 'react-router-dom'  // route to different routes 
 const editor2=document.createElement("div") 
-const ENDPOINT = 'https://server-edtior.herokuapp.com/';
+//const ENDPOINT = 'https://server-edtior.herokuapp.com/';
 
 var q;
 
